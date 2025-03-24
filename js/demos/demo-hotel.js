@@ -133,4 +133,6 @@ Theme Version:	12.0.0
 			}
 		}
 	});
+
+	
 })).apply( this, [ jQuery ]);
