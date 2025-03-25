@@ -1,2 +1,3 @@
 User-agent: *
-Disallow:
+Disallow: /private/
+Sitemap: https://alexnew234.github.io/LP2024_ACS/sitemap.xml
