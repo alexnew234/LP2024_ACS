@@ -53,7 +53,48 @@
 
 		<!-- Theme Custom CSS -->
 		<link rel="stylesheet" href="css/custom.css">
-
+		
+		<!-- Schema.org JSON-LD for Hotel -->
+		<script type="application/ld+json">
+			{
+			  "@context": "http://schema.org",
+			  "@type": "Hotel",
+			  "name": "Hotel Gran Madrid",
+			  "url": "https://alexnew234.github.io/LP2024_ACS/",
+			  "logo": "https://alexnew234.github.io/LP2024_ACS/img/logo.png", 
+			  "description": "Hotel Gran Madrid - Establecimiento de calidad con servicios exclusivos en el corazón de Madrid",
+			  "address": {
+				"@type": "PostalAddress",
+				"streetAddress": "Calle Gran Vía, 123",
+				"addressLocality": "Madrid",
+				"postalCode": "28013",
+				"addressCountry": "ES"
+			  },
+			  "telephone": "+34 912 345 678",
+			  "email": "info@hotelgranmadrid.com",
+			  "priceRange": "$$$",
+			  "starRating": {
+				"@type": "Rating",
+				"bestRating": "5",
+				"ratingValue": "4"
+			  },
+			  "amenityFeature": [
+				{
+				  "@type": "LocationFeatureSpecification",
+				  "name": "Wi-Fi",
+				  "value": "Free"
+				},
+				{
+				  "@type": "LocationFeatureSpecification",
+				  "name": "Swimming Pool",
+				  "value": "Yes"
+				}
+			  ],
+			  "checkInTime": "15:00",
+			  "checkOutTime": "12:00"
+			}
+			</script>
+			
 	</head>
 	<body>
 
@@ -562,6 +603,7 @@
 
 		<!-- Theme Initialization Files -->
 		<script src="js/theme.init.js"></script>
+		
 
 	<!-- Google Maps -->
 		<script>
