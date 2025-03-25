@@ -375,3 +375,20 @@ html.boxed.sticky-header-active #header .header-container {
 		color: var(--primary) !important;
 }
 
+.today {
+    background-color: #f2e8b5 !important; /* Cambia el color de fondo del día actual */
+    color: #000 !important; /* Cambia el color del texto */
+    border-radius: 50%; /* Hace que el fondo del número sea un círculo */
+}
+
+
+.datepicker .highlighted {
+    background-color: #ffcc00 !important; /* Color para los días dentro del rango */
+    color: #fff;
+}
+
+/* Resalta el día de llegada con un color más fuerte */
+.datepicker .start-day {
+    background-color: #ff6600 !important; /* Color para el día de llegada */
+    color: #fff;
+}

@@ -66,46 +66,129 @@ Theme Version:	12.0.0
 		});
 	}
 
+
+
+
+
+
     // DatePicker
-    $('#bookNowArrivalHeader').datepicker({
-		defaultDate: '+1d',
-		startDate: '+1d',
-		autoclose: true,
-		orientation: (($('html[dir="rtl"]').get(0)) ? 'bottom right' : 'bottom'),
-		container: '#header',
-		rtl: (($('html[dir="rtl"]').get(0)) ? true : false)
-	});
+// Inicialización de los campos de fecha de llegada y salida en el formulario
+	// Asegúrate de que la configuración del idioma esté correcta
+	$.fn.datepicker.dates['es'] = {
+		days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+		daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+		daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+		months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+		monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+		today: "Hoy",
+		clear: "Borrar",
+		format: "dd/mm/yyyy",
+		titleFormat: "MM yyyy",
+		weekStart: 1
+	};
 
-    $('#bookNowDepartureHeader').datepicker({
-		defaultDate: '+2d',
-		startDate: '+2d',
+	// Inicialización de los campos de fecha de llegada y salida en el formulario
+	$('#bookNowArrival, #bookNowDeparture').datepicker({
 		autoclose: true,
-		orientation: (($('html[dir="rtl"]').get(0)) ? 'bottom right' : 'bottom'),
-		container: '#header',
-		rtl: (($('html[dir="rtl"]').get(0)) ? true : false)
-	});
-
-    $(document).scroll(() => {
-		$('#bookNowArrivalHeader, #bookNowDepartureHeader').datepicker('hide').blur();
-	});
-
-    $('#bookNowArrival').datepicker({
-		defaultDate: '+1d',
-		startDate: '+1d',
-		autoclose: true,
-		orientation: (($('html[dir="rtl"]').get(0)) ? 'bottom left' : 'bottom left'),
+		language: 'es',  // Aquí se fuerza el idioma español
+		format: 'dd/mm/yyyy',
+		orientation: 'bottom left',
 		container: '#bookFormDetails',
-		rtl: (($('html[dir="rtl"]').get(0)) ? true : false)
-	});
+		startDate: "today",  // Fecha mínima (hoy)
+		todayHighlight: true  // Resalta el día de hoy
+	}).on('changeDate', function(e) {
+		// Elimina el resaltado del día actual al seleccionar una nueva fecha
+		$('.datepicker-days .today').removeClass('today');
 
-    $('#bookNowDeparture').datepicker({
-		defaultDate: '+2d',
-		startDate: '+2d',
-		autoclose: true,
-		orientation: (($('html[dir="rtl"]').get(0)) ? 'bottom left' : 'bottom left'),
-		container: '#bookFormDetails',
-		rtl: (($('html[dir="rtl"]').get(0)) ? true : false)
-	});
+		// Resalta el rango de fechas entre la llegada y la salida
+		var arrivalDate = $('#bookNowArrival').datepicker('getDate');
+		var departureDate = $('#bookNowDeparture').datepicker('getDate');
+
+    // Si ambas fechas están seleccionadas
+    if (arrivalDate && departureDate) {
+        var rangeStart = new Date(arrivalDate);
+        var rangeEnd = new Date(departureDate);
+
+        // Limpia las fechas anteriores resaltadas
+        $('.datepicker-days td').removeClass('highlighted');
+
+        // Recorre todos los días del calendario y resalta los días dentro del rango
+        $('.datepicker-days td').each(function() {
+            var currentCell = $(this);
+            var currentDate = new Date(currentCell.data('date')); // Recupera la fecha de cada celda
+
+            // Compara si la fecha actual está dentro del rango de estancia
+            if (currentDate >= rangeStart && currentDate <= rangeEnd) {
+                currentCell.addClass('highlighted'); // Resalta la celda
+            }
+        });
+    }
+
+    // Validación de fechas: no permitir salida antes de la llegada
+    if (arrivalDate && departureDate && departureDate < arrivalDate) {
+        alert('La fecha de salida no puede ser anterior a la fecha de llegada.');
+        $('#bookNowDeparture').datepicker('setDate', null); // Limpia la fecha de salida
+    }
+});
+
+
+
+// Inicialización de los campos de fecha de llegada y salida en el encabezado
+$('#bookNowArrivalHeader, #bookNowDepartureHeader').datepicker({
+    autoclose: true,
+    language: 'es',  // Aquí también se fuerza el idioma español
+    format: 'dd/mm/yyyy',
+    orientation: 'bottom left',
+    container: '#header',  // Contenedor del encabezado
+    startDate: "today",  // Fecha mínima (hoy)
+    todayHighlight: true  // Resalta el día de hoy
+}).on('changeDate', function(e) {
+    // Elimina el resaltado del día actual al seleccionar una nueva fecha
+    $('.datepicker-days .today').removeClass('today');
+
+    // Obtiene las fechas seleccionadas de llegada y salida
+    var arrivalDate = $('#bookNowArrivalHeader').datepicker('getDate');
+    var departureDate = $('#bookNowDepartureHeader').datepicker('getDate');
+
+    // Validación de la fecha de llegada: no permitir que sea anterior a hoy
+    if (arrivalDate && arrivalDate < new Date()) {
+        alert('La fecha de llegada no puede ser anterior a la fecha actual.');
+        $('#bookNowArrivalHeader').datepicker('setDate', null); // Limpia la fecha de llegada
+        return; // Salir de la función para evitar que se siga ejecutando
+    }
+
+    // Si ambas fechas están seleccionadas
+    if (arrivalDate && departureDate) {
+        var rangeStart = new Date(arrivalDate);
+        var rangeEnd = new Date(departureDate);
+
+        // Limpia las fechas anteriores resaltadas
+        $('.datepicker-days td').removeClass('highlighted');
+
+        // Recorre todos los días del calendario y resalta los días dentro del rango
+        $('.datepicker-days td').each(function() {
+            var currentCell = $(this);
+            var currentDate = new Date(currentCell.data('date')); // Recupera la fecha de cada celda
+
+            // Compara si la fecha actual está dentro del rango de estancia
+            if (currentDate >= rangeStart && currentDate <= rangeEnd) {
+                currentCell.addClass('highlighted'); // Resalta la celda
+            }
+        });
+    }
+
+    // Validación de la fecha de salida: no permitir que sea anterior a la de llegada
+    if (arrivalDate && departureDate && departureDate < arrivalDate) {
+        alert('La fecha de salida no puede ser anterior a la fecha de llegada.');
+        $('#bookNowDepartureHeader').datepicker('setDate', null); // Limpia la fecha de salida
+    }
+});
+
+
+// Deshabilitar autocompletado en los campos de fecha
+$('#bookNowArrival, #bookNowDeparture').attr('autocomplete', 'off');
+
+
 
     // Book Form
     $('#bookFormHeader').validate({
